@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="medicinesTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="880.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.MedicinesTabController">
+   <children>
+      <VBox layoutX="21.0" layoutY="21.0" prefHeight="236.0" prefWidth="82.0" spacing="15.0" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="21.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Medicine ID" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Substance" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Position X" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Position Y" />
+         </children>
+      </VBox>
+      <VBox layoutX="103.0" layoutY="21.0" prefHeight="206.0" prefWidth="139.0" spacing="5.0" AnchorPane.leftAnchor="103.0" AnchorPane.topAnchor="21.0">
+         <children>
+            <TextField fx:id="medIdTF" />
+            <TextField fx:id="nameTF" />
+            <TextField fx:id="substanceTF" />
+            <TextField fx:id="quantityTF" />
+            <TextField fx:id="priceTF" />
+            <TextField fx:id="posXTF" />
+            <TextField fx:id="posYTF" />
+         </children>
+      </VBox>
+      <HBox layoutX="15.0" layoutY="248.0" prefHeight="25.0" prefWidth="228.0" spacing="10.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="248.0">
+         <children>
+            <Button fx:id="insertButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Insert">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="updateButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Update">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Delete" />
+         </children>
+      </HBox>
+      <Button fx:id="refreshButton" layoutX="15.0" layoutY="282.0" mnemonicParsing="false" onAction="#refreshOnClick" prefHeight="25.0" prefWidth="228.0" text="Refresh" />
+      <TableView fx:id="tvMedicines" layoutX="269.0" layoutY="21.0" prefHeight="322.0" prefWidth="596.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="269.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="21.0">
+        <columns>
+          <TableColumn fx:id="medIdCol" prefWidth="75.0" text="Med. ID" />
+          <TableColumn fx:id="nameCol" prefWidth="151.0" text="Name" />
+            <TableColumn fx:id="substanceCol" prefWidth="123.0" text="Substance" />
+            <TableColumn fx:id="quantityCol" prefWidth="68.0" text="Quantity" />
+            <TableColumn fx:id="priceCol" prefWidth="58.0" text="Price" />
+            <TableColumn fx:id="posXCol" prefWidth="58.0" text="Pos. X" />
+            <TableColumn fx:id="posYCol" prefWidth="61.0" text="Pos. Y" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
