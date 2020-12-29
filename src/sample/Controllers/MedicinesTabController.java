@@ -62,8 +62,47 @@ public class MedicinesTabController {
         this.controller = controller;
     }
 
+
+
     public void refreshOnClick(){
         showMedicines();
+    }
+
+    @FXML
+    private void deleteRecord(){
+        String query = "DELETE FROM LEK WHERE ID_LEK="+medIdTF.getText()+";";
+        controller.executeQuery(query);
+        showMedicines();
+    }
+
+    @FXML
+    private void updateRecord(){
+        String query = "UPDATE LEK SET NAZWA ='"+nameTF.getText()+"',SUBSTANCJA='"+substanceTF.getText()+"', ILOSC="+quantityTF.getText()+", CENA="+
+                priceTF.getText()+", X="+posXTF.getText()+", Y="+posYTF.getText()+
+                " where ID_LEK="+medIdTF.getText()+"";
+        controller.executeQuery(query);
+        showMedicines();
+    }
+
+    @FXML
+    public void insertRecord(){
+        String query = "INSERT INTO LEK (NAZWA, SUBSTANCJA, ILOSC, CENA, X, Y) VALUES" +
+                "('"+nameTF.getText()+"','"+substanceTF.getText()+"',"+quantityTF.getText()+","+priceTF.getText()+","+
+                posXTF.getText()+","+posYTF.getText()+");";
+        controller.executeQuery(query);
+        showMedicines();
+    }
+
+    @FXML
+    private void handleMouseAction(){
+        Medicine medicine = tvMedicines.getSelectionModel().getSelectedItem();
+        medIdTF.setText(medicine.getId().toString());
+        nameTF.setText(medicine.getName());
+        substanceTF.setText(medicine.getSubstance());
+        quantityTF.setText(medicine.getQuantity().toString());
+        priceTF.setText(Double.toString(medicine.getPrice()));
+        posXTF.setText(Integer.toString(medicine.getPosX()));
+        posYTF.setText(Integer.toString(medicine.getPosY()));
     }
 
     public ObservableList<Medicine> getMedicineList(){

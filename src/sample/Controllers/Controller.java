@@ -41,8 +41,8 @@ public class Controller {
         Statement st;
         try{
             st = conn.createStatement();
-            st.executeQuery(query);
-            st.executeQuery("commit");
+            st.executeUpdate(query);
+            st.executeUpdate("commit");
         }catch(Exception e){
             e.printStackTrace();
         }
