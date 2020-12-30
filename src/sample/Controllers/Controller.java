@@ -14,9 +14,12 @@ public class Controller {
     //injecting controllers
     @FXML
     private MedicinesTabController medicinesTabController;
+    @FXML
+    private PrescriptionTabController prescriptionTabController;
 
     public void initialize() {
         medicinesTabController.injectController(this);
+        prescriptionTabController.injectController(this);
     }
 
 
