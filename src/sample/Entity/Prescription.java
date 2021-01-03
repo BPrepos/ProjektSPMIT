@@ -17,6 +17,9 @@ public class Prescription {
         this.code = code;
     }
 
+    public Prescription() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -3,12 +3,11 @@ package sample.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import sample.Entity.Client;
 import sample.Entity.Medicine;
+import sample.Entity.MedicinePrescription;
 import sample.Entity.Prescription;
 
 import java.sql.Connection;
@@ -34,6 +33,24 @@ public class PrescriptionTabController {
     private TextField surnameDetailsTF;
     @FXML
     private TextArea otherPrescriptionTA;
+    @FXML
+    private TableView<MedicinePrescription> tvPrescribedMedicines;
+    @FXML
+    private TableColumn<MedicinePrescription, Long> colId;
+    @FXML
+    private TableColumn<MedicinePrescription, String> colName;
+    @FXML
+    private TableColumn<MedicinePrescription, String> colSubstance;
+    @FXML
+    private TableColumn<MedicinePrescription, Integer> colQuantityAvaliable;
+    @FXML
+    private TableColumn<MedicinePrescription, Double> colPrice;
+    @FXML
+    private TableColumn<MedicinePrescription, Integer> colPosX;
+    @FXML
+    private TableColumn<MedicinePrescription, Integer> colPosY;
+    @FXML
+    private TableColumn<MedicinePrescription, Integer> colQuantityPrescribed;
 
     //controllers
     private Controller controller;
@@ -69,6 +86,7 @@ public class PrescriptionTabController {
                 prescriptionResult += pre.getCode()+"\n";
             }
             otherPrescriptionTA.setText(prescriptionResult);
+            showPrescribedMedicines();
         }
     }
 
@@ -79,6 +97,7 @@ public class PrescriptionTabController {
         otherPrescriptionTA.setText("");
         peselTF.setText("");
         codeTF.setText("");
+        tvPrescribedMedicines.getItems().clear();
     }
 
     public ObservableList<Client> getClientList(){
@@ -121,25 +140,60 @@ public class PrescriptionTabController {
         return prescriptionList;
     }
 
-    public ObservableList<Medicine> getPrescribedMedicineList(){
-        ObservableList<Medicine> medList = FXCollections.observableArrayList();
+    public void showPrescribedMedicines(){
+        Prescription prescription = getPrescription(peselTF.getText(),Integer.parseInt(codeTF.getText()));
+        ObservableList<MedicinePrescription> medList = getPrescribedMedicineList(prescription);
+        colId.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Long>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("name"));
+        colSubstance.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("substance"));
+        colQuantityAvaliable.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("quantity"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Double>("price"));
+        colPosX.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("posX"));
+        colPosY.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("posY"));
+        colQuantityPrescribed.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("quantityToBuy"));
+        tvPrescribedMedicines.setItems(medList);
+    }
+
+    public ObservableList<MedicinePrescription> getPrescribedMedicineList(Prescription pres){
+        ObservableList<MedicinePrescription> medList = FXCollections.observableArrayList();
         Connection conn = controller.getConnection();
-        String query = "SELECT * FROM LEK";
+        String query = "SELECT lek.id_lek, lek.nazwa, lek.substancja, lek.ilosc, lek.cena, lek.x, lek.y,lek_recepta.ilosc as ilosc_przepisana " +
+                "FROM lek_recepta " +
+                "INNER JOIN lek ON lek_recepta.id_lek=lek.id_lek " +
+                "where id_recepta="+pres.getId();
         Statement st;
         ResultSet rs;
         try{
             st = conn.createStatement();
             rs = st.executeQuery(query);
-            Medicine med;
+            MedicinePrescription med;
             while (rs.next()){
-                med = new Medicine(rs.getLong("ID_LEK"),rs.getString("NAZWA"),rs.getString("SUBSTANCJA"),rs.getInt("ILOSC"),rs.getDouble("CENA"),
-                        rs.getInt("X"),rs.getInt("Y"));
+                med = new MedicinePrescription(rs.getLong("ID_LEK"),rs.getString("NAZWA"),rs.getString("SUBSTANCJA"),rs.getInt("ILOSC"),rs.getDouble("CENA"),
+                        rs.getInt("X"),rs.getInt("Y"), rs.getInt("ilosc_przepisana"));
                 medList.add(med);
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         return medList;
+    }
+
+    public Prescription getPrescription(String pesel, Integer code){
+        Connection conn = controller.getConnection();
+        String query = "SELECT * FROM RECEPTA WHERE PESEL='"+pesel+"' AND KOD="+code+";";
+        Statement st;
+        ResultSet rs;
+        Prescription pres = new Prescription();
+        try{
+            st = conn.createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next()){
+                pres = new Prescription(rs.getLong("ID_RECEPTA"),rs.getString("PESEL"),rs.getInt("KOD"));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return pres;
     }
 
     

@@ -1,39 +1,18 @@
 package sample.Entity;
 
-public class MedicinePrescription {
+public class MedicinePrescription extends Medicine {
+    private Integer quantityToBuy;
 
-    private Long prescriptionId;
-    private Long medicineId;
-    private Integer quantity;
-
-
-    public MedicinePrescription(Long prescriptionId, Long medicineId, Integer quantity) {
-        this.prescriptionId = prescriptionId;
-        this.medicineId = medicineId;
-        this.quantity = quantity;
+    public MedicinePrescription(Long id, String name, String substance, Integer quantity, double price, Integer posX, Integer posY, Integer quantityToBuy) {
+        super(id, name, substance, quantity, price, posX, posY);
+        this.quantityToBuy = quantityToBuy;
     }
 
-    public Long getPrescriptionId() {
-        return prescriptionId;
+    public Integer getQuantityToBuy() {
+        return quantityToBuy;
     }
 
-    public void setPrescriptionId(Long prescriptionId) {
-        this.prescriptionId = prescriptionId;
-    }
-
-    public Long getMedicineId() {
-        return medicineId;
-    }
-
-    public void setMedicineId(Long medicineId) {
-        this.medicineId = medicineId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setQuantityToBuy(Integer quantityToBuy) {
+        this.quantityToBuy = quantityToBuy;
     }
 }
