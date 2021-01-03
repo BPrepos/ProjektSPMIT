@@ -2,6 +2,7 @@ package sample.Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,6 +14,7 @@ import sample.Entity.Prescription;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.regex.Pattern;
 
 public class PrescriptionTabController {
 
@@ -25,6 +27,8 @@ public class PrescriptionTabController {
     private Button checkButton;
     @FXML
     private Button refreshButton;
+    @FXML
+    private Button finalizeButton;
     @FXML
     private TextField peselDetailsTF;
     @FXML
@@ -51,6 +55,14 @@ public class PrescriptionTabController {
     private TableColumn<MedicinePrescription, Integer> colPosY;
     @FXML
     private TableColumn<MedicinePrescription, Integer> colQuantityPrescribed;
+    @FXML
+    private TableColumn<MedicinePrescription, TextField> colSelect;
+
+    //list of prescribed medicines
+    ObservableList<MedicinePrescription> prescribedMeds;
+    //final list of meds to algorithm
+    ObservableList<Medicine> finalMeds = FXCollections.observableArrayList();
+
 
     //controllers
     private Controller controller;
@@ -58,8 +70,6 @@ public class PrescriptionTabController {
     public void injectController(Controller controller){
         this.controller = controller;
     }
-
-
 
 
     public void checkPrescription(){
@@ -98,6 +108,30 @@ public class PrescriptionTabController {
         peselTF.setText("");
         codeTF.setText("");
         tvPrescribedMedicines.getItems().clear();
+    }
+
+    public void finalizeOnClick(ActionEvent event){
+       finalMeds.clear();
+       ObservableList<MedicinePrescription> tmpList = getFinalizedAllInfoMeds();
+       for(MedicinePrescription tmp : tmpList){
+           finalMeds.add(new Medicine(tmp.getId(),tmp.getName(),tmp.getSubstance(),tmp.getQuantity(),tmp.getPrice(),tmp.getPosX(),tmp.getPosY()));
+       }
+        for(Medicine finalMed : finalMeds){
+            System.out.println(finalMed);
+        }
+
+        
+    }
+
+    public ObservableList<MedicinePrescription> getFinalizedAllInfoMeds(){
+        ObservableList<MedicinePrescription> tmpFinalMeds = FXCollections.observableArrayList();
+        for(MedicinePrescription m : prescribedMeds){
+            if(Pattern.matches("^[1-9][0-9]*$", m.getSelectedTF().getText()) == true ){
+                m.setQuantityBought(Integer.parseInt(m.getSelectedTF().getText()));
+                tmpFinalMeds.add(m);
+            }
+        }
+       return tmpFinalMeds;
     }
 
     public ObservableList<Client> getClientList(){
@@ -142,7 +176,7 @@ public class PrescriptionTabController {
 
     public void showPrescribedMedicines(){
         Prescription prescription = getPrescription(peselTF.getText(),Integer.parseInt(codeTF.getText()));
-        ObservableList<MedicinePrescription> medList = getPrescribedMedicineList(prescription);
+        prescribedMeds = getPrescribedMedicineList(prescription);
         colId.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Long>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("name"));
         colSubstance.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("substance"));
@@ -151,7 +185,8 @@ public class PrescriptionTabController {
         colPosX.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("posX"));
         colPosY.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("posY"));
         colQuantityPrescribed.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Integer>("quantityToBuy"));
-        tvPrescribedMedicines.setItems(medList);
+        colSelect.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,TextField>("selectedTF"));
+        tvPrescribedMedicines.setItems(prescribedMeds);
     }
 
     public ObservableList<MedicinePrescription> getPrescribedMedicineList(Prescription pres){
@@ -170,6 +205,7 @@ public class PrescriptionTabController {
             while (rs.next()){
                 med = new MedicinePrescription(rs.getLong("ID_LEK"),rs.getString("NAZWA"),rs.getString("SUBSTANCJA"),rs.getInt("ILOSC"),rs.getDouble("CENA"),
                         rs.getInt("X"),rs.getInt("Y"), rs.getInt("ilosc_przepisana"));
+                med.isAvaliable();
                 medList.add(med);
             }
         }catch(Exception e){

@@ -64,9 +64,8 @@
       <Label layoutX="38.0" layoutY="289.0" text="Client's other prescriptions" AnchorPane.leftAnchor="38.0" AnchorPane.topAnchor="289.0" />
       <TextArea fx:id="otherPrescriptionTA" disable="true" layoutX="42.0" layoutY="306.0" prefHeight="170.0" prefWidth="227.0" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="306.0" />
       <Button fx:id="refreshButton" layoutX="36.0" layoutY="493.0" mnemonicParsing="false" onAction="#refreshOnClick" prefHeight="25.0" prefWidth="238.0" text="Refresh" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="493.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e9ee" height="235.0" layoutX="295.0" layoutY="274.0" stroke="#d0c5c5" strokeType="INSIDE" width="457.0" AnchorPane.leftAnchor="295.0" AnchorPane.topAnchor="274.0" />
       <Label layoutX="295.0" layoutY="14.0" text="Medicines from prescription" />
-      <TableView fx:id="tvPrescribedMedicines" layoutX="295.0" layoutY="33.0" prefHeight="222.0" prefWidth="672.0">
+      <TableView fx:id="tvPrescribedMedicines" layoutX="295.0" layoutY="33.0" prefHeight="223.0" prefWidth="745.0">
         <columns>
           <TableColumn fx:id="colId" prefWidth="73.0" text="Med. ID" />
           <TableColumn fx:id="colName" prefWidth="114.0" text="Medicine" />
@@ -75,8 +74,10 @@
             <TableColumn fx:id="colPrice" prefWidth="78.0" text="Price" />
             <TableColumn fx:id="colPosX" prefWidth="76.0" text="Pos. X" />
             <TableColumn fx:id="colPosY" prefWidth="74.0" text="Pos. Y" />
-            <TableColumn fx:id="colQuantityPrescribed" prefWidth="76.0" text="Quantity&#10;Prescribed&#10;" />
+            <TableColumn fx:id="colQuantityPrescribed" prefWidth="92.0" text="Quantity&#10;Prescribed&#10;" />
+            <TableColumn fx:id="colSelect" prefWidth="59.0" text="Select" />
         </columns>
       </TableView>
+      <Button fx:id="finalizeButton" layoutX="295.0" layoutY="263.0" mnemonicParsing="false" onAction="#finalizeOnClick" text="Finalize" AnchorPane.leftAnchor="295.0" AnchorPane.topAnchor="263.0" />
    </children>
 </AnchorPane>
