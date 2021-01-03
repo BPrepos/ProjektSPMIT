@@ -7,6 +7,7 @@ public class MedicinePrescription extends Medicine {
     private Integer quantityToBuy;
     private TextField selectedTF;
     private Integer quantityBought = 0;
+    private Long prescriptionID;
 
     public MedicinePrescription(Long id, String name, String substance, Integer quantity, double price, Integer posX, Integer posY, Integer quantityToBuy) {
         super(id, name, substance, quantity, price, posX, posY);
@@ -49,5 +50,13 @@ public class MedicinePrescription extends Medicine {
 
     public void setQuantityBought(Integer quantityBought) {
         this.quantityBought = quantityBought;
+    }
+
+    public Long getPrescriptionID() {
+        return prescriptionID;
+    }
+
+    public void setPrescriptionID(Long prescriptionID) {
+        this.prescriptionID = prescriptionID;
     }
 }

@@ -112,16 +112,27 @@ public class PrescriptionTabController {
 
     public void finalizeOnClick(ActionEvent event){
        finalMeds.clear();
-       ObservableList<MedicinePrescription> tmpList = getFinalizedAllInfoMeds();
-       for(MedicinePrescription tmp : tmpList){
+       ObservableList<MedicinePrescription> allInfoMedsList = getFinalizedAllInfoMeds();
+       for(MedicinePrescription tmp : allInfoMedsList){
            finalMeds.add(new Medicine(tmp.getId(),tmp.getName(),tmp.getSubstance(),tmp.getQuantity(),tmp.getPrice(),tmp.getPosX(),tmp.getPosY()));
+           String query = "update lek set ilosc="+(tmp.getQuantity()-tmp.getQuantityBought())+" where id_lek="+tmp.getId()+";";
+           controller.executeQuery(query);
+           if(tmp.getQuantityToBuy()==tmp.getQuantityBought()){
+               query="delete from lek_recepta where id_recepta="+tmp.getPrescriptionID()+" and id_lek="+tmp.getId()+";";
+           }else{
+               int newQuantity = tmp.getQuantityToBuy()-tmp.getQuantityBought();
+               query = "update lek_recepta set ilosc="+Integer.toString(newQuantity)+" where id_recepta="+tmp.getPrescriptionID()+" and id_lek="+tmp.getId();
+           }
+           controller.executeQuery(query);
        }
-        for(Medicine finalMed : finalMeds){
+       for(Medicine finalMed : finalMeds){
             System.out.println(finalMed);
-        }
+       }
 
         
     }
+
+
 
     public ObservableList<MedicinePrescription> getFinalizedAllInfoMeds(){
         ObservableList<MedicinePrescription> tmpFinalMeds = FXCollections.observableArrayList();
@@ -206,6 +217,7 @@ public class PrescriptionTabController {
                 med = new MedicinePrescription(rs.getLong("ID_LEK"),rs.getString("NAZWA"),rs.getString("SUBSTANCJA"),rs.getInt("ILOSC"),rs.getDouble("CENA"),
                         rs.getInt("X"),rs.getInt("Y"), rs.getInt("ilosc_przepisana"));
                 med.isAvaliable();
+                med.setPrescriptionID(pres.getId());
                 medList.add(med);
             }
         }catch(Exception e){
