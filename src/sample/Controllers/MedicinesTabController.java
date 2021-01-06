@@ -58,11 +58,13 @@ public class MedicinesTabController {
     //controllers
     private Controller controller;
 
+
     public void injectController(Controller controller){
         this.controller = controller;
     }
 
-
+    public MedicinesTabController() {
+    }
 
     public void refreshOnClick(){
         showMedicines();

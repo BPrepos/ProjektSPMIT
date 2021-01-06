@@ -14,6 +14,16 @@ public class Controller {
     //injecting controllers
     @FXML
     private MedicinesTabController medicinesTabController;
+
+    //getter for controller
+    public MedicinesTabController getMedicinesTabController() {
+        return medicinesTabController;
+    }
+
+    public void setMedicinesTabController(MedicinesTabController medicinesTabController) {
+        this.medicinesTabController = medicinesTabController;
+    }
+
     @FXML
     private PrescriptionTabController prescriptionTabController;
 

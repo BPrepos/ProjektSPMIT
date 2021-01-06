@@ -1,18 +1,27 @@
 package sample.Entity;
 
-import javafx.scene.control.CheckBox;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MedicinePrescription extends Medicine {
     private Integer quantityToBuy;
     private TextField selectedTF;
     private Integer quantityBought = 0;
     private Long prescriptionID;
+    private Button substituteBtn;
 
     public MedicinePrescription(Long id, String name, String substance, Integer quantity, double price, Integer posX, Integer posY, Integer quantityToBuy) {
         super(id, name, substance, quantity, price, posX, posY);
         this.quantityToBuy = quantityToBuy;
         this.selectedTF = new TextField("0");
+        this.substituteBtn = new Button("Substitute");
+
     }
 
     public boolean isAvaliable(){
@@ -58,5 +67,14 @@ public class MedicinePrescription extends Medicine {
 
     public void setPrescriptionID(Long prescriptionID) {
         this.prescriptionID = prescriptionID;
+    }
+
+
+    public Button getSubstituteBtn() {
+        return substituteBtn;
+    }
+
+    public void setSubstituteBtn(Button substituteBtn) {
+        this.substituteBtn = substituteBtn;
     }
 }
