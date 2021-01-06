@@ -89,6 +89,8 @@ public class PrescriptionTabController {
     ObservableList<MedicinePrescription> prescribedMeds;
     //final list of meds to algorithm
     ObservableList<Medicine> finalMeds = FXCollections.observableArrayList();
+    //variable for retrieving medicine
+    Medicine medicineToSubstitute;
 
 
     //controllers
@@ -134,6 +136,7 @@ public class PrescriptionTabController {
             }
             otherPrescriptionTA.setText(prescriptionResult);
             showPrescribedMedicines();
+
         }
     }
 
@@ -228,11 +231,12 @@ public class PrescriptionTabController {
 
     public void confirmSubstituteOnCLick(ActionEvent event){
         Medicine substituteMedicine = tvSubstituteMeds.getSelectionModel().getSelectedItem();
-        System.out.println(substituteMedicine);
+        System.out.println(medicineToSubstitute);
+
 
     }
 
-    public void loadSubstituteWindow(){
+    public void loadSubstituteWindow(MedicinePrescription med){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/substitute.fxml"));
             Parent root = (Parent) fxmlLoader.load();
@@ -243,6 +247,8 @@ public class PrescriptionTabController {
             PrescriptionTabController prescriptionTabController = fxmlLoader.getController();
             ObservableList<Medicine> list = controller.getMedicinesTabController().getMedicineList();
             prescriptionTabController.setSubstituteTableView(list);
+            prescriptionTabController.medicineToSubstitute = med;
+
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -255,11 +261,11 @@ public class PrescriptionTabController {
         prescribedMeds = getPrescribedMedicineList(prescription);
         for(MedicinePrescription med : prescribedMeds){
             med.getSubstituteBtn().setOnAction(actionEvent -> {
-               loadSubstituteWindow();
+                loadSubstituteWindow(med);
 
 
             });
-
+            System.out.println(medicineToSubstitute);
         }
         colId.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Long>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("name"));
