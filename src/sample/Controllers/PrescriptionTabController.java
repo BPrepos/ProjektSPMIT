@@ -67,35 +67,14 @@ public class PrescriptionTabController {
     private TableColumn<MedicinePrescription, TextField> colSelect;
     @FXML
     private TableColumn<MedicinePrescription, Button> colSubstitute;
-    @FXML
-    private AnchorPane prescriptionTabAnchorPane;
-    @FXML
-    private AnchorPane substituteAnchorPane;
 
-    //substitute window
-    @FXML
-    private Button confirmBtn;
-    @FXML
-    private Button cancelBtn;
-    @FXML
-    private TableView<Medicine> tvSubstituteMeds;
-    @FXML
-    private TableColumn<Medicine, Long> colMedSubId;
-    @FXML
-    private TableColumn<Medicine, String> colSubName;
-    @FXML
-    private TableColumn<Medicine, String> colSubSubstance;
-    @FXML
-    private TableColumn<Medicine, Integer> colSubQuantity;
-    @FXML
-    private TableColumn<Medicine, Double> colSubPrice;
 
     //list of prescribed medicines
     ObservableList<MedicinePrescription> prescribedMeds;
     //final list of meds to algorithm
     ObservableList<Medicine> finalMeds = FXCollections.observableArrayList();
     //variable for retrieving medicine
-    Medicine medicineToSubstitute;
+    Medicine chosenSubstituteMedicine;
 
 
     //controllers
@@ -106,15 +85,6 @@ public class PrescriptionTabController {
     }
 
 
-
-    public void setSubstituteTableView(ObservableList<Medicine> list){
-        colMedSubId.setCellValueFactory(new PropertyValueFactory<Medicine,Long>("id"));
-        colSubName.setCellValueFactory(new PropertyValueFactory<Medicine,String>("name"));
-        colSubSubstance.setCellValueFactory(new PropertyValueFactory<Medicine,String>("substance"));
-        colSubQuantity.setCellValueFactory(new PropertyValueFactory<Medicine,Integer>("quantity"));
-        colSubPrice.setCellValueFactory(new PropertyValueFactory<Medicine,Double>("price"));
-        tvSubstituteMeds.setItems(list);
-    }
 
     public void checkPrescription(){
         ObservableList<Client> clientDetails = getClientList();
@@ -177,11 +147,6 @@ public class PrescriptionTabController {
     }
 
 
-    public void cancelOnClick(){
-        Stage stage = (Stage) cancelBtn.getScene().getWindow();
-        stage.close();
-    }
-
 
     public ObservableList<MedicinePrescription> getFinalizedAllInfoMeds(){
         ObservableList<MedicinePrescription> tmpFinalMeds = FXCollections.observableArrayList();
@@ -234,28 +199,29 @@ public class PrescriptionTabController {
         return prescriptionList;
     }
 
-    public void confirmSubstituteOnCLick(ActionEvent event) throws IOException {
-        Medicine substituteMedicine = tvSubstituteMeds.getSelectionModel().getSelectedItem();
-        System.out.println(medicineToSubstitute);
-        Stage stage = (Stage) confirmBtn.getScene().getWindow();
-        stage.close();
-        AnchorPane prescriptionTabAnchorPane = FXMLLoader.load(getClass().getResource("/prescriptionTab.fxml"));
-        
 
-    }
 
     public void loadSubstituteWindow(MedicinePrescription med){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/substitute.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/substitute.fxml"));
+            Parent substituteWindowParent = loader.load();
+
+            Scene substituteScene = new Scene(substituteWindowParent);
+
+            SubstituteController substituteController = loader.getController();
+            substituteController.initData(med,controller.getMedicinesTabController().getMedicineList());
+
             Stage stage = new Stage();
-            stage.setScene(new Scene(root,600,400));
+            stage.setScene(substituteScene);
             stage.setTitle("Substitute medicines");
-            stage.show();
-            PrescriptionTabController prescriptionTabController = fxmlLoader.getController();
-            ObservableList<Medicine> list = controller.getMedicinesTabController().getMedicineList();
-            prescriptionTabController.setSubstituteTableView(list);
-            prescriptionTabController.medicineToSubstitute = med;
+            stage.showAndWait();
+            if(substituteController.sendBackMed != null) {
+                otherPrescriptionTA.setText(substituteController.sendBackMed.toString());
+                chosenSubstituteMedicine = substituteController.sendBackMed;
+            }
+
+
 
         }
         catch (IOException ex) {
@@ -273,7 +239,7 @@ public class PrescriptionTabController {
 
 
             });
-            System.out.println(medicineToSubstitute);
+
         }
         colId.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,Long>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<MedicinePrescription,String>("name"));

@@ -17,7 +17,7 @@
           </Tab>
           <Tab text="Prescriptions">
                <content>
-                  <fx:include source="../resources/prescriptionTab.fxml" />
+                  <fx:include fx:id="prescriptionTab" source="../resources/prescriptionTab.fxml" />
                </content>
           </Tab>
         </tabs>
