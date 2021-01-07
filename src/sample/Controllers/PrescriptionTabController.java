@@ -75,6 +75,7 @@ public class PrescriptionTabController {
     ObservableList<Medicine> finalMeds = FXCollections.observableArrayList();
     //variable for retrieving medicine
     Medicine chosenSubstituteMedicine;
+    MedicinePrescription receivedBackMedicinePrescription;
 
 
     //controllers
@@ -132,16 +133,25 @@ public class PrescriptionTabController {
            finalMeds.add(new Medicine(tmp.getId(),tmp.getName(),tmp.getSubstance(),tmp.getQuantity(),tmp.getPrice(),tmp.getPosX(),tmp.getPosY()));
            String query = "update lek set ilosc="+(tmp.getQuantity()-tmp.getQuantityBought())+" where id_lek="+tmp.getId()+";";
            controller.executeQuery(query);
-           if(tmp.getQuantityToBuy()==tmp.getQuantityBought()){
-               query="delete from lek_recepta where id_recepta="+tmp.getPrescriptionID()+" and id_lek="+tmp.getId()+";";
+           if (tmp.getOldMedId() == -1) {
+               if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
+                   query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId() + ";";
+               }else{
+                   int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
+                   query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId();
+               }
            }else{
-               int newQuantity = tmp.getQuantityToBuy()-tmp.getQuantityBought();
-               query = "update lek_recepta set ilosc="+Integer.toString(newQuantity)+" where id_recepta="+tmp.getPrescriptionID()+" and id_lek="+tmp.getId();
+               if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
+                   query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId() + ";";
+               }else{
+                   int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
+                   query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId();
+               }
            }
            controller.executeQuery(query);
        }
        for(Medicine finalMed : finalMeds){
-            System.out.println(finalMed);
+           System.out.println(finalMed);
        }
        showPrescribedMedicines();
     }
@@ -217,11 +227,24 @@ public class PrescriptionTabController {
             stage.setTitle("Substitute medicines");
             stage.showAndWait();
             if(substituteController.sendBackMed != null) {
-                otherPrescriptionTA.setText(substituteController.sendBackMed.toString());
                 chosenSubstituteMedicine = substituteController.sendBackMed;
+                receivedBackMedicinePrescription = substituteController.medSendToSubstitute;
             }
-
-
+            for(int i=0; i<prescribedMeds.size(); i++){
+                if(prescribedMeds.get(i).getId() == receivedBackMedicinePrescription.getId()){
+                    prescribedMeds.get(i).setOldMedId(prescribedMeds.get(i).getId());
+                    prescribedMeds.get(i).setId(chosenSubstituteMedicine.getId());
+                    prescribedMeds.get(i).setName(chosenSubstituteMedicine.getName());
+                    prescribedMeds.get(i).setSubstance(chosenSubstituteMedicine.getSubstance());
+                    prescribedMeds.get(i).setQuantity(chosenSubstituteMedicine.getQuantity());
+                    prescribedMeds.get(i).setPrice(chosenSubstituteMedicine.getPrice());
+                    prescribedMeds.get(i).setPosX(chosenSubstituteMedicine.getPosX());
+                    prescribedMeds.get(i).setPosY(chosenSubstituteMedicine.getPosY());
+                    prescribedMeds.get(i).isAvaliable();
+                }
+            }
+            tvPrescribedMedicines.setItems(prescribedMeds);
+            tvPrescribedMedicines.refresh();
 
         }
         catch (IOException ex) {

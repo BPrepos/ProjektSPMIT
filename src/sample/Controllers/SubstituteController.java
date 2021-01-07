@@ -23,8 +23,6 @@ import java.util.ResourceBundle;
 
 public class SubstituteController {
 
-
-    //substitute window
     @FXML
     private Button confirmBtn;
     @FXML
@@ -72,13 +70,7 @@ public class SubstituteController {
 
     public void confirmSubstituteOnCLick(ActionEvent event) throws IOException {
         Medicine substituteMedicine = tvSubstituteMeds.getSelectionModel().getSelectedItem();
-        System.out.println(substituteMedicine.toString());
         sendBackMed = substituteMedicine;
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/prescriptionTab.fxml"));
-        Parent prescriptionTabParent = loader.load();
-
-
         Stage stage = (Stage) confirmBtn.getScene().getWindow();
         stage.close();
 

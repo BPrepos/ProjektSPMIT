@@ -15,6 +15,7 @@ public class MedicinePrescription extends Medicine {
     private Integer quantityBought = 0;
     private Long prescriptionID;
     private Button substituteBtn;
+    private Long oldMedId = -1L;
 
     public MedicinePrescription(Long id, String name, String substance, Integer quantity, double price, Integer posX, Integer posY, Integer quantityToBuy) {
         super(id, name, substance, quantity, price, posX, posY);
@@ -29,7 +30,16 @@ public class MedicinePrescription extends Medicine {
             selectedTF.setDisable(true);
             return false;
         }
+        selectedTF.setDisable(false);
         return true;
+    }
+
+    public Long getOldMedId() {
+        return oldMedId;
+    }
+
+    public void setOldMedId(Long oldMedId) {
+        this.oldMedId = oldMedId;
     }
 
     public Integer getQuantityToBuy() {
