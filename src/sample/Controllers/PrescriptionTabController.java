@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.w3c.dom.Node;
 import sample.Entity.Client;
@@ -66,6 +67,10 @@ public class PrescriptionTabController {
     private TableColumn<MedicinePrescription, TextField> colSelect;
     @FXML
     private TableColumn<MedicinePrescription, Button> colSubstitute;
+    @FXML
+    private AnchorPane prescriptionTabAnchorPane;
+    @FXML
+    private AnchorPane substituteAnchorPane;
 
     //substitute window
     @FXML
@@ -229,10 +234,13 @@ public class PrescriptionTabController {
         return prescriptionList;
     }
 
-    public void confirmSubstituteOnCLick(ActionEvent event){
+    public void confirmSubstituteOnCLick(ActionEvent event) throws IOException {
         Medicine substituteMedicine = tvSubstituteMeds.getSelectionModel().getSelectedItem();
         System.out.println(medicineToSubstitute);
-
+        Stage stage = (Stage) confirmBtn.getScene().getWindow();
+        stage.close();
+        AnchorPane prescriptionTabAnchorPane = FXMLLoader.load(getClass().getResource("/prescriptionTab.fxml"));
+        
 
     }
 
