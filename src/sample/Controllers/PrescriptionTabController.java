@@ -187,6 +187,7 @@ public class PrescriptionTabController {
         yd = 25.0;
         polyline.getPoints().add(xd);
         polyline.getPoints().add(yd);
+        polyline.setStroke(Color.RED);
         root.getChildren().add(polyline);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
