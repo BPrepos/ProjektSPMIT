@@ -3,16 +3,19 @@ package sample.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import org.w3c.dom.Node;
+import sample.Algorithm.AlgorithmWrapper;
+import sample.Algorithm.Position;
 import sample.Entity.Client;
 import sample.Entity.Medicine;
 import sample.Entity.MedicinePrescription;
@@ -22,6 +25,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class PrescriptionTabController {
@@ -71,6 +76,7 @@ public class PrescriptionTabController {
 
     //list of prescribed medicines
     ObservableList<MedicinePrescription> prescribedMeds;
+    ObservableList<Medicine> allMeds;
     //final list of meds to algorithm
     ObservableList<Medicine> finalMeds = FXCollections.observableArrayList();
     //variable for retrieving medicine
@@ -127,33 +133,66 @@ public class PrescriptionTabController {
     }
 
     public void finalizeOnClick(ActionEvent event){
-       finalMeds.clear();
-       ObservableList<MedicinePrescription> allInfoMedsList = getFinalizedAllInfoMeds();
-       for(MedicinePrescription tmp : allInfoMedsList){
-           finalMeds.add(new Medicine(tmp.getId(),tmp.getName(),tmp.getSubstance(),tmp.getQuantity(),tmp.getPrice(),tmp.getPosX(),tmp.getPosY()));
-           String query = "update lek set ilosc="+(tmp.getQuantity()-tmp.getQuantityBought())+" where id_lek="+tmp.getId()+";";
-           controller.executeQuery(query);
-           if (tmp.getOldMedId() == -1) {
-               if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
-                   query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId() + ";";
-               }else{
-                   int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
-                   query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId();
-               }
-           }else{
-               if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
-                   query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId() + ";";
-               }else{
-                   int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
-                   query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId();
-               }
-           }
-           controller.executeQuery(query);
-       }
-       for(Medicine finalMed : finalMeds){
-           System.out.println(finalMed);
-       }
-       showPrescribedMedicines();
+        finalMeds.clear();
+        ObservableList<MedicinePrescription> allInfoMedsList = getFinalizedAllInfoMeds();
+        for(MedicinePrescription tmp : allInfoMedsList){
+            finalMeds.add(new Medicine(tmp.getId(),tmp.getName(),tmp.getSubstance(),tmp.getQuantity(),tmp.getPrice(),tmp.getPosX(),tmp.getPosY()));
+            String query = "update lek set ilosc="+(tmp.getQuantity()-tmp.getQuantityBought())+" where id_lek="+tmp.getId()+";";
+            controller.executeQuery(query);
+            if (tmp.getOldMedId() == -1) {
+                if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
+                    query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId() + ";";
+                }else{
+                    int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
+                    query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getId();
+                }
+            }else{
+                if (tmp.getQuantityToBuy() == tmp.getQuantityBought()){
+                    query = "delete from lek_recepta where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId() + ";";
+                }else{
+                    int newQuantity = tmp.getQuantityToBuy() - tmp.getQuantityBought();
+                    query = "update lek_recepta set ilosc=" + Integer.toString(newQuantity) + " where id_recepta=" + tmp.getPrescriptionID() + " and id_lek=" + tmp.getOldMedId();
+                }
+            }
+            controller.executeQuery(query);
+        }
+        for(Medicine finalMed : finalMeds){
+            System.out.println(finalMed);
+        }
+        showPrescribedMedicines();
+        AlgorithmWrapper algorithmWrapper = new AlgorithmWrapper();
+        List<Position> positionList = algorithmWrapper.calculate(finalMeds, 1, 1);
+        allMeds = getMedicineList();
+        int x,y;
+        double xd, yd;
+        Pane root = new Pane();
+        for (Medicine temp : allMeds)
+        {
+            x = temp.getPosX();
+            y = temp.getPosY();
+            Rectangle rectangle = new Rectangle(50*(x-1), 50*(y-1),50,50);
+            rectangle.setFill(Color.WHITE);
+            rectangle.setStroke(Color.BLACK);
+            root.getChildren().add(rectangle);
+        }
+        Polyline polyline = new Polyline();
+        for (Position temp2 : positionList)
+        {
+            xd = temp2.getX()*50.0-25.0;
+            yd = temp2.getY()*50.0-25.0;
+            polyline.getPoints().add(xd);
+            polyline.getPoints().add(yd);
+        }
+        xd = 25.0;
+        yd = 25.0;
+        polyline.getPoints().add(xd);
+        polyline.getPoints().add(yd);
+        root.getChildren().add(polyline);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Path plot");
+        stage.show();
     }
 
 
@@ -166,7 +205,7 @@ public class PrescriptionTabController {
                 tmpFinalMeds.add(m);
             }
         }
-       return tmpFinalMeds;
+        return tmpFinalMeds;
     }
 
     public ObservableList<Client> getClientList(){
@@ -296,6 +335,28 @@ public class PrescriptionTabController {
                         rs.getInt("X"),rs.getInt("Y"), rs.getInt("ilosc_przepisana"));
                 med.isAvaliable();
                 med.setPrescriptionID(pres.getId());
+                medList.add(med);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return medList;
+    }
+
+    public ObservableList<Medicine> getMedicineList(){
+        ObservableList<Medicine> medList = FXCollections.observableArrayList();
+        Connection conn = controller.getConnection();
+        String query = "SELECT lek.id_lek, lek.nazwa, lek.substancja, lek.ilosc, lek.cena, lek.x, lek.y " +
+                "FROM lek";
+        Statement st;
+        ResultSet rs;
+        try{
+            st = conn.createStatement();
+            rs = st.executeQuery(query);
+            Medicine med;
+            while (rs.next()){
+                med = new Medicine(rs.getLong("ID_LEK"),rs.getString("NAZWA"),rs.getString("SUBSTANCJA"),rs.getInt("ILOSC"),rs.getDouble("CENA"),
+                        rs.getInt("X"),rs.getInt("Y"));
                 medList.add(med);
             }
         }catch(Exception e){
