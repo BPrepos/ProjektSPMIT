@@ -67,6 +67,13 @@ public class MedicinesTabController {
     }
 
     public void refreshOnClick(){
+        medIdTF.setText("");
+        nameTF.setText("");
+        substanceTF.setText("");
+        quantityTF.setText("");
+        priceTF.setText("");
+        posXTF.setText("");
+        posYTF.setText("");
         showMedicines();
     }
 
