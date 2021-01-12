@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="prescriptionTabAnchorPane" prefHeight="550.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.PrescriptionTabController">
+<AnchorPane fx:id="prescriptionTab" prefHeight="550.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.PrescriptionTabController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4e9ee" height="100.0" layoutX="39.0" layoutY="33.0" stroke="#d0c5c5" strokeType="INSIDE" width="238.0" AnchorPane.leftAnchor="39.0" AnchorPane.topAnchor="33.0" />
       <VBox layoutX="39.0" layoutY="33.0" prefHeight="61.0" prefWidth="117.0" spacing="15.0" AnchorPane.leftAnchor="39.0" AnchorPane.topAnchor="33.0">

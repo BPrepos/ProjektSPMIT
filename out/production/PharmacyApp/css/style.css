@@ -1,0 +1,23 @@
+.button {
+    -fx-background-radius: 100;
+    -fx-background-color:  #5e58ff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+
+.text-field {
+    -fx-background-color: -fx-text-box-border, -fx-background ;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+}
+
+.text-field:focused {
+    -fx-background-color: #5e58ff, -fx-focus-color, -fx-background ;;
+
+}
+
+.text-id {
+    -fx-font-family: Verdana;
+
+}

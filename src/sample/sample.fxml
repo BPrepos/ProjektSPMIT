@@ -2,13 +2,21 @@
 
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1112.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1112.0" stylesheets="@../resources/css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.Controller">
     <children>
-        <HBox prefHeight="72.0" prefWidth="723.0" style="-fx-background-color: blue;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <TabPane layoutY="72.0" prefHeight="362.0" prefWidth="723.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="72.0">
+        <HBox prefHeight="106.0" prefWidth="1112.0" style="-fx-background-color: #5e58ff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="logoImageView" fitHeight="110.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/image/pharmacy_icon.png" />
+               </image></ImageView>
+         </children></HBox>
+      <TabPane layoutY="109.0" prefHeight="595.0" prefWidth="1112.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="109.0">
         <tabs>
           <Tab text="Medicines">
             <content>

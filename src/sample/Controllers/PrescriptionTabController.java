@@ -13,6 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sample.Algorithm.AlgorithmWrapper;
 import sample.Algorithm.Position;
@@ -72,6 +75,8 @@ public class PrescriptionTabController {
     private TableColumn<MedicinePrescription, TextField> colSelect;
     @FXML
     private TableColumn<MedicinePrescription, Button> colSubstitute;
+    @FXML
+    private ImageView logoImageView;
 
 
     //list of prescribed medicines
@@ -90,7 +95,6 @@ public class PrescriptionTabController {
     public void injectController(Controller controller){
         this.controller = controller;
     }
-
 
 
     public void checkPrescription(){
@@ -130,6 +134,7 @@ public class PrescriptionTabController {
         peselTF.setText("");
         codeTF.setText("");
         tvPrescribedMedicines.getItems().clear();
+
     }
 
     public void finalizeOnClick(ActionEvent event){

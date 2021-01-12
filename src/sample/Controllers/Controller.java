@@ -3,6 +3,8 @@ package sample.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.sql.*;
@@ -10,6 +12,7 @@ import java.util.Properties;
 
 
 public class Controller {
+
 
     //injecting controllers
     @FXML
