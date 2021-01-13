@@ -11,11 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Algorithm.AlgorithmWrapper;
 import sample.Algorithm.Position;
@@ -171,13 +173,17 @@ public class PrescriptionTabController {
         int x,y;
         double xd, yd;
         Pane root = new Pane();
-        for (Medicine temp : allMeds)
-        {
+        for (Medicine temp : allMeds) {
             x = temp.getPosX();
             y = temp.getPosY();
             Rectangle rectangle = new Rectangle(50*(x-1), 50*(y-1),50,50);
             rectangle.setFill(Color.WHITE);
             rectangle.setStroke(Color.BLACK);
+            if(x==1&&y==1)
+            {
+                rectangle.setFill(Color.GREEN);
+                rectangle.setStroke(Color.BLUE);
+            }
             root.getChildren().add(rectangle);
         }
         Polyline polyline = new Polyline();
@@ -187,6 +193,9 @@ public class PrescriptionTabController {
             yd = temp2.getY()*50.0-25.0;
             polyline.getPoints().add(xd);
             polyline.getPoints().add(yd);
+            Circle circle = new Circle(xd,yd,5);
+            circle.setFill(Color.RED);
+            root.getChildren().add(circle);
         }
         xd = 25.0;
         yd = 25.0;
@@ -194,6 +203,8 @@ public class PrescriptionTabController {
         polyline.getPoints().add(yd);
         polyline.setStroke(Color.RED);
         root.getChildren().add(polyline);
+        Text text = new Text(5,15,"START");
+        root.getChildren().add(text);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
